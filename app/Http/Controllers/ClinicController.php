@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Clinic;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class ClinicController extends Controller
 {
@@ -12,7 +13,14 @@ class ClinicController extends Controller
      */
     public function index()
     {
-        return view('clinics.index');
+        $clinics = Clinic::where('owner_user_id', auth()->id())
+            ->orderBy('name')
+            ->get()
+            ->toArray();
+
+        return Inertia::render('clinic/clinicList', [
+            'clinics' => $clinics,
+        ]);
     }
 
     /**
@@ -30,12 +38,14 @@ class ClinicController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required',
-            'logo_url' => 'nullable|url',
         ]);
 
-        Clinic::create($validated);
+        Clinic::create([
+            'name' => $validated['name'],
+            'owner_user_id' => auth()->id(),
+        ]);
 
-        return redirect()->route('clinics.index');
+        return to_route('clinics.list');
     }
 
     /**
