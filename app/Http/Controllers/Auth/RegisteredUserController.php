@@ -48,6 +48,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return to_route('first-clinic');
+        return to_route('clinics.first');
     }
 }
