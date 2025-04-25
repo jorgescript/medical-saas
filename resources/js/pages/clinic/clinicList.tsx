@@ -14,8 +14,8 @@ import {
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
-    title: 'Dashboard',
-    href: '/dashboard',
+    title: 'Mis clinicas',
+    href: '/clinicas',
   },
 ];
 
@@ -26,7 +26,11 @@ interface ClinicListProps {
 export default function ClinicList({ clinics }: ClinicListProps) {
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <Head title="Mis clinicas" />
+      <Head>
+        <title>Mis clinicas</title>
+        <meta name="description" content="Mis clinicas" />
+        {/* Cambiar favicon */}
+      </Head>
       <Table>
         <TableCaption>Mis clinicas</TableCaption>
         <TableHeader>
