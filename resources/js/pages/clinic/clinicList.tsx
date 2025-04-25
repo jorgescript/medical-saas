@@ -2,6 +2,16 @@ import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
 
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+
 const breadcrumbs: BreadcrumbItem[] = [
   {
     title: 'Dashboard',
@@ -17,13 +27,27 @@ export default function ClinicList({ clinics }: ClinicListProps) {
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <Head title="Mis clinicas" />
-      <div>
-        {clinics.map((clinic) => (
-          <div key={clinic.id}>
-            <p>{clinic.name}</p>
-          </div>
-        ))}
-      </div>
+      <Table>
+        <TableCaption>Mis clinicas</TableCaption>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[100px]">Name</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Method</TableHead>
+            <TableHead className="text-right">Amount</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {clinics.map((clinic) => (
+            <TableRow key={clinic.id}>
+              <TableCell className="font-medium">{clinic.name}</TableCell>
+              <TableCell>Paid</TableCell>
+              <TableCell>Credit Card</TableCell>
+              <TableCell className="text-right">$250.00</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </AppLayout>
   );
 }
