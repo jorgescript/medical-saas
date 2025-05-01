@@ -16,12 +16,12 @@ import { EditClinic } from "@/components/modals/editClinic";
 
 
 export const ClinicsTable = ({ clinics }: ClinicList) => {
-  const [clinicName, setClinicName] = useState('');
+  const [clinic, setClinic] = useState({ id: 0, name: "" });
 
   const editModal = useModal();
 
-  const handleEditModal = (clinicName: string) => {
-    setClinicName(clinicName)
+  const handleEditModal = (clinic: { id: number, name: string }) => {
+    setClinic(clinic)
     editModal.open()
   }
 
@@ -42,7 +42,7 @@ export const ClinicsTable = ({ clinics }: ClinicList) => {
               <TableCell>{clinic.name}</TableCell>
               <TableCell>Activa</TableCell>
               <TableCell>
-                <button onClick={() => handleEditModal(clinic.name)} className=" mr-2">
+                <button onClick={() => handleEditModal(clinic)} className=" mr-2">
                   <FilePenLine className="h-5 w-5 text-blue-500" />
                 </button>
                 <button onClick={() =>
@@ -61,7 +61,7 @@ export const ClinicsTable = ({ clinics }: ClinicList) => {
           ))}
         </TableBody>
       </Table>
-      <EditClinic isOpen={editModal.isOpen} onClose={editModal.close} name={clinicName} />
+      <EditClinic isOpen={editModal.isOpen} onClose={editModal.close} clinic={clinic} />
     </>
   )
 }

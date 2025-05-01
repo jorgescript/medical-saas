@@ -71,12 +71,10 @@ class ClinicController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required',
-            'logo_url' => 'nullable|url',
         ]);
 
         $clinic->update($validated);
-
-        return redirect()->route('clinics.index');
+        return redirect()->route('clinics.list');
     }
 
     /**

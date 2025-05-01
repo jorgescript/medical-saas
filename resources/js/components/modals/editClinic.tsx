@@ -11,28 +11,33 @@ import {
 } from "@/components/ui/dialog";
 import InputError from "../input-error";
 import { useForm } from "@inertiajs/react";
-import { FormEventHandler } from 'react';
+import { FormEventHandler, useEffect } from 'react';
 import { LoaderCircle } from "lucide-react";
 
 interface EditClinicProps {
   isOpen: boolean;
   onClose: () => void;
-  name: string
+  clinic: { id: number, name: string }
 }
 
 type EditClinicForm = {
   name: string;
 };
 
-export const EditClinic = ({ isOpen, onClose, name }: EditClinicProps) => {
-  const { data, setData, post, processing, errors, reset } = useForm<Required<EditClinicForm>>({
+export const EditClinic = ({ isOpen, onClose, clinic }: EditClinicProps) => {
+  const { data, setData, put, processing, errors, reset } = useForm<Required<EditClinicForm>>({
     name: '',
   });
 
+  useEffect(() => {
+    setData('name', clinic.name);
+  }, [clinic]);
+
   const submit: FormEventHandler = (e) => {
     e.preventDefault();
-    post(route('login'), {
+    put(route('clinics.update', clinic.id), {
       onFinish: () => reset('name'),
+      onSuccess: () => onClose(),
     });
   };
 
@@ -40,7 +45,7 @@ export const EditClinic = ({ isOpen, onClose, name }: EditClinicProps) => {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>{name}</DialogTitle>
+          <DialogTitle>{clinic.name}</DialogTitle>
           <DialogDescription>
             Edita el nombre de la clínica
           </DialogDescription>
@@ -50,10 +55,11 @@ export const EditClinic = ({ isOpen, onClose, name }: EditClinicProps) => {
             <div className="grid gap-2">
               <Input
                 id="name"
+                name="name"
                 type="text"
                 required
                 autoFocus
-                value={data.name || name}
+                value={data.name}
                 onChange={(e) => setData('name', e.target.value)}
                 placeholder="Nombre de la clínica"
               />
@@ -65,7 +71,7 @@ export const EditClinic = ({ isOpen, onClose, name }: EditClinicProps) => {
           <Button type="button" variant="secondary" onClick={onClose}>
             Cancelar
           </Button>
-          <Button type="submit" className="text-white w-full" tabIndex={4} disabled={processing}>
+          <Button type="button" onClick={submit} className="text-white w-full" tabIndex={4} disabled={processing}>
             {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
             Guardar cambios
           </Button>

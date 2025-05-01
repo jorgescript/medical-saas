@@ -10,6 +10,7 @@ Route::name('clinics.')->group(function () {
     'middleware' => [
       'auth',
       'verified',
+      'role:admin'
     ],
   ], function () {
 
@@ -19,6 +20,7 @@ Route::name('clinics.')->group(function () {
 
     Route::get('/', [ClinicController::class, 'index'])->name('list');
     Route::post('/', [ClinicController::class, 'store'])->name('store');
+    Route::put('/{clinic}', [ClinicController::class, 'update'])->name('update');
 
     /* Route::get('/', [ReferredController::class, 'index'])->name('home');
     Route::get('/crear', [ReferredController::class, 'createReferredView'])->name('create');
