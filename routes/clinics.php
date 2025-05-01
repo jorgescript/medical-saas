@@ -21,6 +21,7 @@ Route::name('clinics.')->group(function () {
     Route::get('/', [ClinicController::class, 'index'])->name('list');
     Route::post('/', [ClinicController::class, 'store'])->name('store');
     Route::put('/{clinic}', [ClinicController::class, 'update'])->name('update');
+    Route::put('/{clinic}/status', [ClinicController::class, 'updateStatus'])->name('update-status');
 
     /* Route::get('/', [ReferredController::class, 'index'])->name('home');
     Route::get('/crear', [ReferredController::class, 'createReferredView'])->name('create');

@@ -16,6 +16,7 @@ class Clinic extends Model
         'name',
         'logo_url',
         'owner_user_id',
+        'status',
     ];
 
     public function billingData(): HasOne

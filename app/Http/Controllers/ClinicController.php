@@ -86,4 +86,13 @@ class ClinicController extends Controller
 
         return redirect()->route('clinics.index');
     }
+
+    public function updateStatus(Request $request, Clinic $clinic)
+    {
+        $validated = $request->validate([
+            'status' => 'required|in:0,1',
+        ]);
+        $clinic->update($validated);
+        return redirect()->route('clinics.list');
+    }
 }

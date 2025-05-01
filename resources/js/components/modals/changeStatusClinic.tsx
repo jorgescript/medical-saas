@@ -1,6 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input"
-import { Label } from '@/components/ui/label';
 import {
   Dialog,
   DialogContent,
@@ -9,40 +7,40 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import InputError from "../input-error";
 import { useForm } from "@inertiajs/react";
 import { FormEventHandler, useEffect } from 'react';
 import { LoaderCircle } from "lucide-react";
 import { toast } from "sonner";
+import { Clinic } from "@/clinics/interfaces/Clinic";
+import InputError from "../input-error";
 
-interface EditClinicProps {
+interface ChangeStatusClinicProps {
   isOpen: boolean;
   onClose: () => void;
-  clinic: { id: number, name: string }
+  clinic: Clinic
 }
 
-type EditClinicForm = {
-  name: string;
+type ChangeStatusClinicForm = {
+  status: number;
 };
 
-export const EditClinic = ({ isOpen, onClose, clinic }: EditClinicProps) => {
-  const { data, setData, put, processing, errors, reset } = useForm<Required<EditClinicForm>>({
-    name: "",
+export const ChangeStatusClinic = ({ isOpen, onClose, clinic }: ChangeStatusClinicProps) => {
+  const { data, setData, put, processing, errors, reset } = useForm<Required<ChangeStatusClinicForm>>({
+    status: clinic.status,
   });
 
   useEffect(() => {
-    setData('name', clinic.name);
+    setData('status', clinic.status == 1 ? 0 : 1);
   }, [clinic]);
 
   const submit: FormEventHandler = (e) => {
     e.preventDefault();
-    put(route('clinics.update', clinic.id), {
-      onFinish: () => reset('name'),
+    put(route('clinics.update-status', clinic.id), {
       onSuccess: () => {
-        toast("Clinica editada exitosamente", {
-          description: "Clinica editada exitosamente",
-        });
-        onClose()
+        toast("Estatus cambiado exitosamente", {
+          description: "El estatus de la clínica se ha cambiado exitosamente",
+        })
+        onClose();
       },
     });
   };
@@ -53,25 +51,12 @@ export const EditClinic = ({ isOpen, onClose, clinic }: EditClinicProps) => {
         <DialogHeader>
           <DialogTitle>{clinic.name}</DialogTitle>
           <DialogDescription>
-            Edita el nombre de la clínica
+            ¿{clinic.status === 1 ? 'Quieres cambiar el estatus de la clínica a Inactivo' : 'Quieres cambiar el estatus de la clínica a Activo'}?
           </DialogDescription>
         </DialogHeader>
         <form className="flex flex-col gap-6" onSubmit={submit}>
-          <div className="grid gap-6">
-            <div className="grid gap-2">
-              <Input
-                id="name"
-                name="name"
-                type="text"
-                required
-                autoFocus
-                value={data.name}
-                onChange={(e) => setData('name', e.target.value)}
-                placeholder="Nombre de la clínica"
-              />
-              <InputError message={errors.name} />
-            </div>
-          </div>
+          <input hidden name="status" value={data.status} readOnly />
+          <InputError message={errors.status} />
         </form>
         <DialogFooter>
           <Button type="button" variant="secondary" onClick={onClose}>
